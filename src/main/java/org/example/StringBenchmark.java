@@ -2,6 +2,7 @@ package org.example;
 
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
 import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
@@ -16,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @State(Scope.Benchmark)
+@Fork(1)
 public class StringBenchmark {
     private String foo;
 
@@ -35,5 +37,10 @@ public class StringBenchmark {
     @Benchmark
     public void fmt(Blackhole blackhole) {
         blackhole.consume(String.format("%s_%s", foo, bar));
+    }
+
+    @Benchmark
+    public void stringBuilder(Blackhole blackhole) {
+        blackhole.consume(new StringBuilder().append(foo).append("_").append(bar).toString());
     }
 }
